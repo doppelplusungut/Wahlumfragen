@@ -2,7 +2,7 @@ library(rvest)
 
 htmlToDf <- function(html) {
   
-#this function is a mess and depends highly on the format on the formatting on the source site wahlrecht.de. Goes to shit should they ever update
+#this function is a mess and depends highly on the specific formatting on the source site wahlrecht.de. Goes to shit should they ever update
 
 df <- html %>%
   html_element("body") %>%
