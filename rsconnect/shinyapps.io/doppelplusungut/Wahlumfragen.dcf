@@ -1,0 +1,13 @@
+name: Wahlumfragen
+title: Wahlumfragen
+username:
+account: doppelplusungut
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4529553
+bundleId: 4959608
+url: https://doppelplusungut.shinyapps.io/Wahlumfragen/
+when: 1629835599.16714
+lastSyncTime: 1629835599.16714
+asMultiple: FALSE
+asStatic: FALSE
