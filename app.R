@@ -15,7 +15,7 @@ library(dplyr)
 library(tidyverse)
 library(slider)
 library(tidyquant)
-
+library(scales)
 smoothed <- function(electiondata, d) {
     for(party in c("Union", "SPD", "LINKE", "Gruene", "AfD", "FDP")) {
         vec = sapply(electiondata$time, FUN = function(x) {
@@ -132,7 +132,11 @@ server <- function(input, output) {
             geom_line(aes(y = smoothed_Gruene), color = "green") +
             geom_line(aes(y = smoothed_AfD), color = "steelblue") + 
             geom_line(aes(y = smoothed_FDP), color = "yellow") + 
-            geom_line(aes(y = smoothed_LINKE), color = "pink")
+            geom_line(aes(y = smoothed_LINKE), color = "pink") +
+            ggtitle("Zeitentwicklung der Umfragewerte großer Parteien") +
+            scale_x_date(name = "Zeitpunkt", date_minor_breaks = "1 month") + 
+            scale_y_continuous(name = "Ergebnis in Prozent", labels = scales::percent, limits = c(0,NA)) +
+            theme_bw()
     })
 }
 
