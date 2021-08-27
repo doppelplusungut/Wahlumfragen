@@ -16,10 +16,27 @@ library(tidyverse)
 library(slider)
 library(tidyquant)
 library(scales)
-smoothed <- function(electiondata, d) {
+library(DT)
+
+ndayaverage <- function(electiondata, n, date, party) {
+    return(mean(electiondata[electiondata$time <= date & electiondata$time >= (date - n),][[party]]))
+}
+
+latest_surveys <- function(electiondata, n) {
+    date = max(electiondata$time)
+    parties = c("Union", "SPD", "LINKE", "Gruene", "AfD", "FDP")
+    surevydata = data.frame(
+        parties = parties,
+        value = sapply(parties, FUN = function(party) {
+            ndayaverage(electiondata, n, date, party)
+        })
+    )
+}
+
+smoothed <- function(electiondata, n) {
     for(party in c("Union", "SPD", "LINKE", "Gruene", "AfD", "FDP")) {
-        vec = sapply(electiondata$time, FUN = function(x) {
-            mean(electiondata[electiondata$time <= x & electiondata$time >= (x - d),][[party]])
+        vec = sapply(electiondata$time, FUN = function(date) {
+            ndayaverage(electiondata, n, date, party)
         })
         electiondata[[paste("smoothed_",party,sep="")]] <- vec
     }
@@ -109,7 +126,10 @@ ui <- fluidPage(
 
         # Show a plot of the generated distribution
         mainPanel(
-           plotOutput("feverCurve")
+           plotOutput("feverCurve"),
+           plotOutput("partyPie"),
+           h2("Party test"),
+           dataTableOutput("partytable")
         )
     )
 )
@@ -137,6 +157,16 @@ server <- function(input, output) {
             scale_x_date(name = "Zeitpunkt", date_minor_breaks = "1 month") + 
             scale_y_continuous(name = "Ergebnis in Prozent", labels = scales::percent, limits = c(0,NA)) +
             theme_bw()
+    })
+    
+    output$partyPie <- renderPlot({
+        ggplot(data = latest_surveys(electiondata, input$smooth_days), aes(x = "", y = value, fill = parties)) +
+            geom_bar(stat = "identity", width = 1) + 
+            coord_polar("y", start = 0)
+    })
+    
+    output$partytable <- renderDataTable({
+        latest_surveys(electiondata, input$smooth_days)
     })
 }
 

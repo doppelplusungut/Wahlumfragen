@@ -5,9 +5,9 @@ account: doppelplusungut
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 4529553
-bundleId: 4959608
+bundleId: 4962765
 url: https://doppelplusungut.shinyapps.io/Wahlumfragen/
-when: 1629835599.16714
-lastSyncTime: 1629835599.16714
+when: 1629899068.76985
+lastSyncTime: 1629899068.76985
 asMultiple: FALSE
 asStatic: FALSE
